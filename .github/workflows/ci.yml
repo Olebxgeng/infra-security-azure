@@ -1,0 +1,15 @@
+name: Infra Security CI
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: OPA Policy Check
+        run: |
+          terraform plan -out=plan.json
+          conftest test plan.json --policy policies/
+      - name: Run Terratest
+        run: go test ./tests/...
