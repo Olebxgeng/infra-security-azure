@@ -1,44 +1,173 @@
-Infrastructure as Code with Security Policies (Azure-Focused)
+# 🔐 Infra Security on Azure (IaC)
 
-Overview
+![License](https://img.shields.io/badge/License-MIT-green)
+![Terraform](https://img.shields.io/badge/IaC-Terraform-blue)
+![Azure](https://img.shields.io/badge/Cloud-Azure-0078D4)
+![OPA](https://img.shields.io/badge/Policy-OPA-orange)
+![Status](https://img.shields.io/badge/Project-Active-success)
 
-This project demonstrates a secure, version-controlled Infrastructure as Code (IaC) setup for Azure using Terraform. It enforces security policies with Open Policy Agent (OPA) to ensure compliance with standards like CIS (Center for Internet Security) benchmarks, focusing on mandatory encryption, access controls, and Role-Based Access Control (RBAC) with least privilege. Automated tests via Terratest validate configurations, integrating security into the development lifecycle to prevent misconfigurations, data breaches, and unauthorized access.
+> Secure Infrastructure as Code (IaC) implementation for Microsoft Azure using **Terraform**, **Open Policy Agent (OPA)**, and **automated testing** to enforce security controls and compliance.
 
-Key goals:
+---
 
-Security-First IaC: Embed policies (e.g., encryption on Storage Accounts and VMs, no public access) directly into code changes.
-Azure-Specific: Provisions resources like Resource Groups, VNets, Storage Accounts, VMs, and RBAC assignments.
-Automation: CI/CD pipelines run OPA checks and tests on every pull request, blocking insecure deployments.
-Compliance: Aligns with CIS benchmarks for encryption, access controls, and RBAC.
-This project promotes "shift-left" security, where issues are caught early in version control rather than post-deployment.
+## 📌 Table of Contents
 
-Features
+- [Overview](#-overview)
+- [Objectives](#-objectives)
+- [Features](#-features)
+- [Architecture](#-architecture)
+- [Repository Structure](#-repository-structure)
+- [Tech Stack](#-tech-stack)
+- [Getting Started](#-getting-started)
+- [Security Controls](#-security-controls)
+- [Testing](#-testing)
+- [CI/CD Pipeline](#-cicd-pipeline)
+- [Author](#-Authot)
 
-Terraform Provisioning: Multi-environment Azure infrastructure (e.g., dev/prod) with reusable modules.
-OPA Policy Enforcement: Rego-based rules deny non-compliant resources (e.g., unencrypted Storage Accounts or VMs without RBAC).
-Automated Testing: Terratest validates CIS benchmarks (e.g., encryption enabled, access restricted) using Azure APIs.
-RBAC and Least Privilege: Assigns minimal roles (e.g., Reader, Contributor) via azurerm_role_assignment.
-CI/CD Integration: GitHub Actions automate validation on pushes/PRs.
-Security Enhancements: Includes network isolation, monitoring, secrets management, and compliance automation.
-Version Control: Git tracks all changes for auditability and rollbacks.
+---
+
+## 🚀 Overview
+
+This project demonstrates a **security-first Infrastructure as Code (IaC)** approach for deploying and managing Azure cloud resources.
+
+Security policies are embedded directly into the deployment pipeline to ensure:
+- Misconfigurations are blocked early  
+- Compliance is continuously enforced  
+- Infrastructure changes remain auditable and repeatable  
+
+---
+
+## 🎯 Objectives
+
+- Apply **shift-left security** in cloud infrastructure  
+- Enforce **least privilege and secure defaults**  
+- Integrate **policy-as-code** into Terraform workflows  
+- Showcase real-world **DevSecOps practices**  
+
+---
+
+## 🧱 Features
+
+### 🔐 Security & Compliance
+- OPA policy enforcement using Rego  
+- Encryption, networking and RBAC policies  
+- Centralised policy library  
+
+### 🏗️ Infrastructure as Code
+- Modular Terraform structure  
+- Environment separation (dev / prod)  
+- Azure-native best practices  
+
+### 🤖 Automation
+- GitHub Actions CI/CD  
+- Automated security checks  
+- Infrastructure validation before apply  
+
+---
+
+## 🗺️ Architecture
+
+```text
+Developer → GitHub → GitHub Actions
+                  ↓
+           Terraform Plan
+                  ↓
+             OPA Policies
+                  ↓
+          Secure Azure Infra
+```
+---
+
+## 📁 Repository Structure
+
+.github/
+└── workflows/         # CI/CD pipelines
+
+policies/
+└── *.rego             # OPA security policies
+
+terraform/
+└── environments/
+    └── azure/         # Azure Terraform code
+
+tests/
+└── *.go               # Terratest test cases
+
+---
+
+## 🧰 Tech Stack
+
+| Tool              | Purpose                     |
+| ----------------- | --------------------------- |
+| Terraform         | Infrastructure provisioning |
+| Azure Provider    | Azure resource management   |
+| Open Policy Agent | Policy-as-Code              |
+| Rego              | Policy language             |
+| Terratest         | Security testing            |
+| GitHub Actions    | CI/CD pipeline              |
+| Azure CLI         | Authentication & management |
+
+---
+
+## 🛠️ Getting Started
+
+Prerequisites
+- Terraform CLI
+- Azure CLI
+- Go (for Terratest)
+- GitHub account
+
+Setup
+git clone https://github.com/Olebxgeng/infra-security-azure.git
+cd infra-security-azure
+az login
+terraform init
+terraform plan
+
+---
+
+## 🔒 Security Controls
+
+This project enforces:
+- Mandatory encryption
+- Secure networking rules
+- RBAC least privilege
+- No public exposure by default
+- Policy-based deployment blocking
+
+---
+
+## 🧪 Testing
+
+Run infrastructure security tests:
+go test ./tests/ -v
+
+Tests validate:
+- Policy enforcement
+- Resource configuration
+- Compliance alignment
+
+---
+
+## 🔄 CI/CD Pipeline
+
+Every push triggers:
+- Terraform validation
+- OPA policy checks
+- Security test execution
+- Merge blocked if violations exist
+
+---
+
+## 👤 Author
+Olebogeng Sebogodi
+Security Engineering
+GitHub: https://github.com/Olebxgeng
 
 
-Beyond basics, the project includes:
-
-Encryption: HTTPS-only on Storage, host/disk encryption on VMs.
-Access Controls: No public blob access, SSH key-only auth on VMs.
-RBAC/Least Privilege: Assigns minimal roles (e.g., Reader on RG, Contributor on Storage).
-Network Isolation: VNets, subnets, and NSGs restrict traffic.
-Monitoring: Integrate Azure Monitor for logs/alerts (add azurerm_monitor_diagnostic_setting).
-Secrets Management: Use Azure Key Vault for SSH keys/secrets.
-Compliance Automation: OPA denies non-compliant resources; extend for MFA/patching.
-Vulnerability Scanning: Add Azure Security Center for scans.
-Backup/DR: Include Azure Backup for resilience.
-Zero-Trust: Enforce conditional access and micro-segmentation.
-To improve further:
 
 
-OPA: Tests policies against plans (e.g., denies unencrypted resources).
-Terratest: End-to-end checks (e.g., queries Azure APIs for encryption status).
-Manual: Use Azure Portal to verify RBAC assignments and resource states.
-CIS Benchmarks: Ensures alignment (e.g., 3.1 - Ensure Storage Accounts enforce HTTPS).
+
+
+
+
