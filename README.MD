@@ -42,7 +42,6 @@ Security policies are embedded directly into the deployment pipeline to ensure:
 - Apply **shift-left security** in cloud infrastructure  
 - Enforce **least privilege and secure defaults**  
 - Integrate **policy-as-code** into Terraform workflows  
-- Showcase real-world **DevSecOps practices**  
 
 ---
 
